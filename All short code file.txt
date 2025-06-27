@@ -25,6 +25,19 @@ if (specificPath === "knowledge") {
     document.head.appendChild(link);
 } 
 </script>
+================================================================
+
+// Outer loop index set in inner loop
+
+
+{% for item in module.image_content_group %}
+  {% set outer_index = loop.index %}
+  
+  {% for item2 in item.repeater_box_group %}
+    Outer index: {{ outer_index }}, Inner index: {{ loop.index }}
+  {% endfor %}
+{% endfor %}
+
 
 ================================================================
 Section Color With opacity
@@ -1445,6 +1458,7 @@ $("#seconds").text(Math.floor((distance % minute) / second));
 ===========================================================
 
 // Remove Hubspot form heading
+// Remove Hubspot form heading
 
 {% if module.title is truthy %}
 {% set no_title = False %}
@@ -2064,3 +2078,232 @@ window.addEventListener('scroll', () => {
       </div>
     </div>
     {% else %}
+	
+	
+=============================================================================
+// Hide for loop outer divs
+
+ 
+{% if contents|length > 0 %} // add for loop main item 
+  <div class="latest-posts-wrapper">
+    <!-- Optional heading -->
+    <!--<h2 class="hs-author-listing-header">Latest</h2>-->
+    <div class="author-listing-inner">
+      {% for content in contents %}
+        <div class="single-post">
+          <h3>{{ content.name }}</h3>
+          <p>{{ content.post_summary }}</p>
+          <a href="{{ content.absolute_url }}">Read more</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+========================================================================
+// header scroll up to show then down to hide
+let lastScroll = 0;
+
+window.addEventListener('scroll', function () {
+  const scrollPos = window.scrollY || window.pageYOffset;
+
+  // Handle scroll direction
+  if (scrollPos > lastScroll) {
+    // Scrolling down
+    document.body.classList.remove('scroll-up');
+    document.body.classList.add('scroll-down');
+  } else {
+    // Scrolling up
+    document.body.classList.add('scroll-up');
+    document.body.classList.remove('scroll-down');
+  }
+
+  lastScroll = scrollPos <= 0 ? 0 : scrollPos; // avoid negative values
+
+  // Remove scroll-up at top of page
+  if (scrollPos === 0) {
+    document.body.classList.remove('scroll-up');
+  }
+
+  // Handle scroll threshold classes
+  if (scrollPos >= 10) {
+    document.body.classList.add('scrolled-80');
+  } else {
+    document.body.classList.remove('scrolled-80');
+  }
+
+  if (scrollPos >= 150) {
+    document.body.classList.add('scrolled-150');
+  } else {
+    document.body.classList.remove('scrolled-150');
+  }
+});
+
+//=============================================================================
+animated Typing text
+
+      <div class="typing_spacer_ct{{name}}">
+        <div class="typing_text{{name}}" style="font-family: {{ module.style.typing_text_group.typing_font.font }}; {{ module.style.typing_text_group.typing_font.style }}; color: {{ module.style.typing_text_group.typing_font.color }}; font-size: {{ module.style.typing_text_group.typing_font.size }}px;"> </div><span class="typing_spacer">i</span>
+      </div>
+	  
+{{ require_js("https://code.jquery.com/jquery-3.5.1.js", "body") }}
+{{ require_js("https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js", "head") }}
+
+<script>
+
+  var typing = new Typed(".typing_text{{name}}", {
+                         strings: ["", {% for item in module.typing_text %}"{{ item }}",{% endfor %}],
+    typeSpeed: {{ module.style.typing_text_group.type_speed }},
+      backSpeed: {{ module.style.typing_text_group.back_space_speed }},
+        loop: true,
+  });
+
+
+</script>
+{%end_require_js%}
+
+
+
+
+
+
+
+
+
+//=========================================================================
+
+add boolean field to template to add class
+for base file
+{% boolean "nav_toggle" label='Hide Footer Form', value='False', no_wrapper=True, export_to_template_context=True %}
+{% boolean "nav_toggles" label='Transparent Header', value='False', no_wrapper=True, export_to_template_context=True %}
+
+
+
+ <body class="{% if widget_data.nav_toggle.value == true %} hide_footer_form {% endif %} {% if widget_data.nav_toggles.value == true %} transparent-header-2025 {% endif %}">
+  
+  https://prnt.sc/kVKe_VEID26c
+  
+  
+  
+  
+  
+  
+  
+=// =============================================
+video popup
+
+ <div class="video-wrap">
+        <div class="thumbnail-image video_popup--open">
+          {% if module.thumbnail_image.src %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail_image.width|escape_attr }}" height="{{ module.thumbnail_image.height|escape_attr }}"' %}
+          {% if module.thumbnail_image.size_type == 'auto' %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail_image.width|escape_attr }}" height="{{ module.thumbnail_image.height|escape_attr }}" style="max-width: 100%; height: auto;"' %}
+          {% elif module.thumbnail_image.size_type == 'auto_custom_max' %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail_image.max_width|escape_attr }}" height="{{ module.thumbnail_image.max_height|escape_attr }}" style="max-width: 100%; height: auto;"' %}
+          {% endif %}
+          {% set loadingAttr = module.thumbnail_image.loading != 'disabled' ? 'loading="{{ module.thumbnail_image.loading|escape_attr }}"' : '' %}
+          <img src="{{ module.thumbnail_image.src|escape_url }}" alt="{{ module.thumbnail_image.alt|escape_attr }}" {{ loadingAttr }} {{ sizeAttrs }}>
+          {% endif %}
+          <div class="play_video-icon" id="playImage">
+            <img src="https://resources.sempreanalytics.com/hubfs/Sempre%20Analytics%20-%202025/Images/Events/play-icon.svg" alt="play-icon" width="60" height="60">
+          </div>
+        </div>
+        <div class="popup-overlay" id="popupModal" style="display:none;">
+          <div class="popup-box">
+            <span class="popup-close"><img src="https://resources.sempreanalytics.com/hubfs/Sempre%20Analytics%20-%202025/Images/Events/close-btn.png" alt="close-btn" height="39" width="39"></span>
+            <video id="myVideo" width="600" controls>
+              <source src="{{ module.add_video_file }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+
+$(document).ready(function () {
+  // Function to open popup and play video
+  function openPopupAndPlayVideo() {
+    $('#popupModal').fadeIn();
+    $('body').addClass('popup-open');
+
+    const video = $('#myVideo')[0];
+    if (video) {
+      video.play();
+    }
+  }
+
+  // Open popup and play video on click of .video_popup--open
+  $('.video_popup--open').click(function (e) {
+    e.preventDefault();
+    openPopupAndPlayVideo();
+  });
+
+  // Close popup and pause video (no reset)
+  $('.popup-close>img, .popup-overlay').click(function (e) {
+    if ($(e.target).is('.popup-close>img') || $(e.target).is('.popup-overlay')) {
+      $('#popupModal').fadeOut();
+      $('body').removeClass('popup-open');
+
+      const video = $('#myVideo')[0];
+      if (video) {
+        video.pause();
+        // Do not reset: no video.currentTime = 0
+      }
+    }
+  });
+});
+
+
+
+
+============================================================================
+
+//           Read More Read Less module           //
+
+<div class="read-more-sec">
+  <div class="page-center">
+    <div class="read-more-inner">
+      <div class="content">
+        <h2>Customize Shifts to Match Your Workflow</h2>
+        <p class="read-more-text">
+          Not all restaurants run the same and your shift system shouldn’t either. Set custom shift durations, split shifts, recurring schedules and role-based assignments tailored to each location or team. Discover the importance of restaurant CRM systems in enhancing guest experience and improving restaurant performance.
+          <!-- Add more content here if needed -->
+        </p>
+      </div>
+      <div class="btn" style="display: none;">
+        <a href="javascript:void(0)" class="read-more-toggle">Read More +</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script inside .read-more-sec -->
+  <script>
+    (function () {
+      const container = document.currentScript.closest(".read-more-sec");
+      const charLimit = 250;
+      const textEl = container.querySelector(".read-more-text");
+      const btnWrap = container.querySelector(".btn");
+      const toggleBtn = container.querySelector(".read-more-toggle");
+
+      const fullText = textEl.innerHTML.trim();
+
+      if (fullText.length > charLimit) {
+        const shortText = fullText.slice(0, charLimit) + "...";
+        textEl.innerHTML = shortText;
+        btnWrap.style.display = "block";
+
+        toggleBtn.addEventListener("click", function () {
+          const isExpanded = textEl.getAttribute("data-expanded") === "true";
+          if (isExpanded) {
+            textEl.innerHTML = shortText;
+            textEl.setAttribute("data-expanded", "false");
+            toggleBtn.textContent = "Read More +";
+          } else {
+            textEl.innerHTML = fullText;
+            textEl.setAttribute("data-expanded", "true");
+            toggleBtn.textContent = "Read Less -";
+          }
+        });
+      }
+    })();
+  </script>
+</div>
